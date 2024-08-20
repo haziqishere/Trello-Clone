@@ -1,5 +1,11 @@
 # Trello-Clone
  Intern second project code along
 
-## Library Used
+
+## Tech used
+
+### Library
 -ShadcnUI
+
+### Authentication
+-Clerk
