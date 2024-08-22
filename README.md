@@ -3,6 +3,7 @@
 
 
 ## Tech used
+-Prisma
 
 ### Library
 -ShadcnUI
