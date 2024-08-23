@@ -5,8 +5,10 @@
 ## Tech used
 -Prisma
 
-### Library
+### UI Library
 -ShadcnUI
+-Sonner
+-Lucid React
 
 ### Authentication
 -Clerk
