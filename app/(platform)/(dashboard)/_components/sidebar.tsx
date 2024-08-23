@@ -91,7 +91,7 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
             onExpand={onExpand}
           />
         ))}
-      </Accordion>
+      </Accordion>      
     </>
   );
 };
