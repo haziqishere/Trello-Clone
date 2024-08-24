@@ -5,10 +5,13 @@
 ## Tech used
 -Prisma
 
-### UI Library
+### API Services
+-Splash API
+
+## UI Library
 -ShadcnUI
 -Sonner
 -Lucid React
 
-### Authentication
+## Authentication
 -Clerk
