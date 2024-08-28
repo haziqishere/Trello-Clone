@@ -1,9 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+
+import { useAction } from "@/hooks/use-action";
+import { updateListOrder } from "@/actions/update-list-order";
+import { updateCardOrder } from "@/actions/update-card-order";
 import { ListWithCards } from "@/types";
+
 import ListForm from "./list-form";
 import ListItem from "./list-item";
+import { toast } from "sonner";
 
 interface ListContainerProps {
   data: ListWithCards[];
@@ -20,6 +26,22 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 
 export const ListContainer = ({ data, boardId }: ListContainerProps) => {
   const [orderedData, setOrderedData] = useState(data);
+  const { execute: executeupdateListOrder } = useAction(updateListOrder, {
+    onSuccess: () => {
+      toast.success("List reorder updated");
+    },
+    onError: (error) => {
+      toast.error("Failed to reorder list");
+    },
+  });
+  const { execute: executeupdateCardtOrder } = useAction(updateCardOrder, {
+    onSuccess: () => {
+      toast.success("Card reorder updated");
+    },
+    onError: (error) => {
+      toast.error("Failed to reorder card");
+    },
+  });
   useEffect(() => {
     setOrderedData(data);
   }, [data]);
@@ -46,8 +68,8 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
       );
 
       setOrderedData(items);
+      executeupdateListOrder({ items, boardId });
       // TODO: Trigger Server Action
-      // User moves the card to anoher list
     }
     // User moves a card
     if (type === "card") {
@@ -90,9 +112,10 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
         sourceList.card = reorderedCards;
 
         setOrderedData(newOrderedData);
-
-        // TODO: Trigger Server Action
-        // User moves the card to another list
+        executeupdateCardtOrder({
+          boardId: boardId,
+          items: reorderedCards,
+        });
       } else {
         // Remove card from the source list
         const [movedCard] = sourceList.card.splice(source.index, 1);
