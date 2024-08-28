@@ -116,6 +116,7 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
           boardId: boardId,
           items: reorderedCards,
         });
+        // User moves a card to a different list
       } else {
         // Remove card from the source list
         const [movedCard] = sourceList.card.splice(source.index, 1);
@@ -135,7 +136,10 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
         });
 
         setOrderedData(newOrderedData);
-        //TODO: Trigger Server Action
+        executeupdateCardtOrder({
+          boardId: boardId,
+          items: destList.card,
+        });
       }
     }
   };
