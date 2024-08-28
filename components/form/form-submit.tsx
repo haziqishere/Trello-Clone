@@ -39,3 +39,5 @@ export const FormSubmit = ({
     </Button>
   );
 };
+
+export default FormSubmit;
