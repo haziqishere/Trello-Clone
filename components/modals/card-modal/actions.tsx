@@ -1,23 +1,89 @@
 "use client";
+import { useParams } from "next/navigation";
+import { Copy, TrashIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CardWithList } from "@/types";
-import { Copy, TrashIcon } from "lucide-react";
+import { toast } from "sonner";
+
+import { useAction } from "@/hooks/use-action";
+import { copyCard } from "@/actions/copy-card";
+import { deleteCard } from "@/actions/delete-card";
+import { useCardModal } from "@/hooks/use-card-modal";
 
 interface ActionProps {
   data: CardWithList;
 }
 
 export const Actions = ({ data }: ActionProps) => {
+  const params = useParams();
+  const cardModal = useCardModal();
+
+  const { execute: executeCopyCard, isLoading: isLoadingCopy } = useAction(
+    copyCard,
+    {
+      onSuccess(data) {
+        toast.success(`Successfully copied ${data.title}`);
+        cardModal.onClose();
+      },
+      onError(error) {
+        toast.error(error);
+      },
+    }
+  );
+
+  const { execute: executeDeleteCard, isLoading: isLoadingDelete } = useAction(
+    deleteCard,
+    {
+      onSuccess(data) {
+        toast.success(`Successfully deleted ${data.title}`);
+        cardModal.onClose();
+      },
+      onError(error) {
+        toast.error(error);
+      },
+    }
+  );
+
+  const onCopy = () => {
+    const boardId = params.boardId as string;
+
+    executeCopyCard({
+      id: data.id,
+      boardId,
+    });
+  };
+
+  const onDelete = () => {
+    const boardId = params.boardId as string;
+
+    executeDeleteCard({
+      id: data.id,
+      boardId,
+    });
+  };
+
   return (
     <div className="space-y-2 mt-2">
       <p className="text-xs font-semibold">Actions</p>
-      <Button variant="gray" className="w-full justify-start" size="inline">
+      <Button
+        onClick={onCopy}
+        disabled={isLoadingCopy}
+        variant="gray"
+        className="w-full justify-start"
+        size="inline"
+      >
         <Copy className="h-4 w-4 mr-2" />
         Copy
       </Button>
-      <Button variant="cancel" className="w-full justify-start" size="inline">
+      <Button
+        onClick={onDelete}
+        disabled={isLoadingDelete}
+        variant="cancel"
+        className="w-full justify-start"
+        size="inline"
+      >
         <TrashIcon className="h-4 w-4 mr-2" />
         Delete
       </Button>
