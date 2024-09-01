@@ -50,7 +50,8 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
     const boardId = formData.get("boardId") as string;
 
     if (title === data.title) {
-      return disableEditing();
+      disableEditing();
+      return;
     }
     execute({
       title,
